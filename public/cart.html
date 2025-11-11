@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - Meng Store</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <a href="/">MengStore</a>
+        </div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/products">Products</a>
+            <a href="/cart">Cart </a>
+        </div>
+    </nav>
+
+    <main class="container">
+        <h1>Shopping Cart</h1>
+        <button class="btn btn-primary" onclick="clearCart()">Clear</button>
+        <button class="btn" onclick="proceedToCheckout()">Pay</button>
+        <div class="cart-available" id="cart">
+            <!-- cart will display here -->
+        </div>
+    </main>
+    <div id="cartContainer"></div>
+    
+    <!-- ✅ Payment Popup -->
+    <div id="checkoutPopup" class="popup">
+        <div class="popup-content">
+            <!-- <span class="close-btn" onclick="closeCheckout()">&times;</span> -->
+            <h2>Bank Payment</h2>
+            <p id="checkoutAmount"></p>
+            <div id="qrcode"></div>
+            <p>Scan to pay with your banking app</p>
+        </div>
+    </div>
+    
+    <!-- Include QRCode.js library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+
+    <script>
+        // Function to display cart items
+    </script>
+    <script src="/js/addtocart.js"></script>
+</body>
+
+</html>

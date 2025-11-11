@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details - Meng Store</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <a href="/">MengStore</a>
+        </div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/products">Products</a>
+            <a href="/cart">Cart </a>
+        </div>
+    </nav>
+
+    <main class="container">
+        <a href="/products" class="back-link">← Back to Products</a>
+
+        <div class="product-detail" id="productDetail">
+            <!-- Product details will be loaded by JavaScript -->
+            <p>Loading product details...</p>
+        </div>
+    </main>
+<!-- <button class="btn" onclick="showToast('Test message!', 'success')">Test Toast</button> -->
+    <script>
+        // Get product ID from URL
+        const pathParts = window.location.pathname.split('/');
+        const productId = pathParts[pathParts.length - 1];
+
+        // Load product details
+        loadProductDetails(productId);
+
+        async function loadProductDetails(id) {
+            try {
+                const response = await fetch(`/api/products/${id}`);
+                const product = await response.json();
+
+                // Store product globally for addToCart function - THIS IS CRITICAL!
+                window.currentProduct = product;
+                console.log("📦 Product stored globally:", window.currentProduct);
+                
+                const productDetail = document.getElementById('productDetail');
+                if (product.category === "Clothing") {
+                    let currentProduct = null;
+                    productDetail.innerHTML = `
+                    <div class="product-image">
+                        <img src="${product.image}" alt="${product.name}" onerror="this.src='/images/placeholder.avif'">
+                    </div>
+                    <div class="product-info">
+                        <h1>${product.name}</h1>
+                        <h3>Price</h3>
+                        <p class="price">$${product.price}</p>
+                        <p class="category"><strong>Category:</strong> ${product.category}</p>
+                        <h3>Description</h3>
+                        <p class="description">
+      "Made from a soft, breathable cotton blend (or specify material, e.g., 100% ring-spun cotton) that feels great against the skin, offering all-day wearability.",</p></br>
+                         <div class="size">
+                            <h4 class="sizefont">Size</h4>
+                            <div class="sizeDe">
+                                <input type="radio" id="small" name="size" value="XS">
+                                <label for="small">XS</label><br>
+                                <input type="radio" id="medium" name="size" value="S">
+                                <label for="medium">S</label><br>
+                                <input type="radio" id="medium" name="size" value="M">
+                                <label for="medium">M</label><br>
+                                <input type="radio" id="large" name="size" value="L">
+                                <label for="large">L</label>
+                                <input type="radio" id="large" name="size" value="XL">
+                                <label for="large">XL</label>
+                            </div>
+                        </div>
+                        <div class="proQty">
+                            <h4>Quantity</h4>
+                            <div class="btnqty">
+                                <button class="qtyBtn" onclick="decreaseQty()">-</button>
+                                <input type="text" class="qtyview" value="1" readonly>
+                                <button class="qtyBtn" onclick="increaseQty()">+</button>
+                            </div>
+                        </div> 
+                        <button class="btn btn-primary" onclick="addToCart()">Add to Cart</button>
+                        <a href="/cart"><button class="btn btn-secondary">Go To Cart</button></a>
+                    </div>`;
+                } else {
+                    productDetail.innerHTML = `
+                    <div class="product-image">
+                        <img src="${product.image}" alt="${product.name}" onerror="this.src='/images/placeholder.avif'">
+                    </div>
+                    <div class="product-info">
+                        <h1>${product.name}</h1>
+                        <p class="price">$${product.price}</p>
+                        <p class="category">Category: ${product.category}</p>
+                        <p class="description">High-quality product with excellent features.</p>
+                        </br>
+                        <div class="product-actions">
+                            <button class="btn btn-primary" onclick="addToCart()">Add to Cart</button>
+                            <a href="/cart"><button class="btn btn-secondary">Go To Cart</button></a>
+                        </div>
+                    </div>
+                `;
+                }
+                // Update page title
+                document.title = `${product.name} - My Store`;
+            } catch (error) {
+                console.error('Error loading product details:', error);
+                document.getElementById('productDetail').innerHTML = '<p>Product not found.</p>';
+            }
+        }
+       
+        // Quantity ViewItems
+        function increaseQty() {
+            let qty = document.querySelector(".qtyview");
+            qty.value = parseInt(qty.value) + 1;
+        }
+        function decreaseQty() {
+            let qty = document.querySelector(".qtyview");
+            if (parseInt(qty.value) > 0) {
+                qty.value = parseInt(qty.value) - 1;
+            }
+        }
+    </script>
+    <script src="/js/addtocart.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Meng Store</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <a href="/">MengStore</a>
+        </div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/products">Products</a>
+            <a href="/cart">Cart </a>
+        </div>
+    </nav>
+    <main class="container">
+        <h1>Welcome to Our Store!</h1>
+        <p>Discover amazing products at great prices.</p>
+
+        <section class="featured-products">
+            <h2>Featured Products</h2>
+            <div class="product-grid" id="featuredProducts">
+                <!-- Products will be loaded by JavaScript -->
+            </div>
+        </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="./js/script.js"></script>
+    <script>
+
+        // Load featured products
+        loadFeaturedProducts();
+
+        async function loadFeaturedProducts() {
+            try {
+                const response = await fetch('/api/products');
+                const products = await response.json();
+                const featuredProducts = products.slice(0, 4);
+
+                const productsGrid = document.getElementById('featuredProducts');
+                productsGrid.innerHTML = featuredProducts.map(product => `
+                    <div class="product-card">
+                        <a href="/products/${product.id}"><img src="${product.image}" alt="${product.name}" onerror="this.src='/images/placeholder.avif'"></a>
+                        <h3>${product.name}</h3>
+                        <p class="price">$${product.price}</p>
+                        <a href="/products/${product.id}" class="btn">View Details</a>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading products:', error);
+            }
+        }
+    </script>
+</body>
+
+</html>
